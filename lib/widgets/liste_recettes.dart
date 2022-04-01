@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:recettes/pages/details_recette.dart';
 import 'package:recettes/widgets/rating.dart';
 
 import '../models/recettes.dart';
 
-class ListRecettes extends StatefulWidget {
-  const ListRecettes({Key? key}) : super(key: key);
+class ListRecettesWidget extends StatefulWidget {
+  const ListRecettesWidget({Key? key}) : super(key: key);
 
   @override
-  State<ListRecettes> createState() => _ListRecettesState();
+  State<ListRecettesWidget> createState() => _ListRecettesWidgetState();
 }
 
-class _ListRecettesState extends State<ListRecettes> {
+class _ListRecettesWidgetState extends State<ListRecettesWidget> {
   @override
   void initState() {
     // TODO: implement initState
@@ -41,6 +42,12 @@ class _ListRecettesState extends State<ListRecettes> {
                 ),
               ),
               child: ListTile(
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(DetailRecettePage.routeName, arguments: {
+                    'id': recettes.getRecetteByIndex(index).id,
+                  });
+                },
                 title: Text(recettes.getRecetteByIndex(index).title),
                 trailing: ChangeNotifierProvider.value(
                     value: recettes.getRecetteByIndex(index), child: Rating()),

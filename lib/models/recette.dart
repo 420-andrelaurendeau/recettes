@@ -18,6 +18,10 @@ class Instruction {
     required this.instruction,
     required this.photoURL,
   });
+
+  String get photoUrl {
+    return "https://cegep.fdtt.space/images/${photoURL}";
+  }
 }
 
 // Commentaire
@@ -50,6 +54,10 @@ class Recette with ChangeNotifier {
     required this.date_added,
   });
 
+  String get cover_image_url {
+    return "https://cegep.fdtt.space/images/${cover_photo}";
+  }
+  
   Recette.fromjson(jsonPayload)
       : this.id = jsonPayload['id'].toString(),
         title = jsonPayload['title'],
