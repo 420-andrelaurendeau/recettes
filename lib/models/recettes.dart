@@ -40,17 +40,19 @@ class Recettes with ChangeNotifier {
     _recetteList.forEach((element) => print("${element.id}:${element.title}"));
   }
 
-  Recette getRecetteByID(int id) {
+  static Future<Recette> getRecetteByID(int id) async {
     // Retourne la recette avec le ID
     // Si il n'y a pas de recette avec cet ID retourner un exception NoSuchRecipe
-    final recette =
-        _recetteList.where((element) => element.id == id.toString()).toList();
+    final url = Uri.parse('https://cegep.fdtt.space/v1/recipes/$id.json');
 
-    if (recette.length == 0) {
-      throw NoSuchRecipe;
-    }
+    var response = await http.get(url, headers: {
+      "debugme": "true",
+    });
+    // Process the response
+    var jsonPayload = json.decode(utf8.decode(response.bodyBytes));
 
-    return recette[0];
+    // Ici on devrait verfier les erreurs.
+    return Recette.fromjson(jsonPayload["data"]);
   }
 
   void removeRecetteById(String id) {

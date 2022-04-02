@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recettes/widgets/details_recette.dart';
 
+import '../models/recette.dart';
 import '../models/recettes.dart';
 
 class DetailRecettePage extends StatelessWidget {
@@ -14,21 +15,41 @@ class DetailRecettePage extends StatelessWidget {
     final arguments =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
     final recette_id = arguments['id'];
-    final _recettes = Provider.of<Recettes>(context);
-    late final _recette_courante;
 
-    // Ne devrait pas arrive sauf lors du development avec une sauvegarde...
-    try {
-      _recette_courante = _recettes.getRecetteByID(int.parse(recette_id));
-    } on NoSuchRecipe {
-      return Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
+    return FutureBuilder(
+      future: Recettes.getRecetteByID(int.parse(recette_id)),
+      builder: (context, snapshot) {
+        print("Connection state is : ${snapshot.connectionState}");
+        print("Snapshot Data is ${snapshot.data}");
+        print("Snapshot error is ${snapshot.error}");
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_recette_courante.title),
-      ),
-      body: DetailRecetteWidget(_recette_courante),
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return Scaffold(
+            appBar: AppBar(
+              title: Text("chargement"),
+            ),
+            body: Center(child: CircularProgressIndicator()),
+          );
+
+        if (snapshot.hasError)
+          return Scaffold(
+            appBar: AppBar(
+              title: Text("Erreur!"),
+            ),
+            body: Center(
+                child: Text(
+              "Malheureusement cette recette ne peut pas etre charge",
+              style: TextStyle(color: Colors.red),
+            )),
+          );
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text((snapshot.data as Recette).title),
+          ),
+          body: DetailRecetteWidget((snapshot.data as Recette)),
+        );
+      },
     );
   }
 }

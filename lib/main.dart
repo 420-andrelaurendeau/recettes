@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recettes/pages/details_recette.dart';
-import 'package:recettes/widgets/liste_recettes.dart';
 
 import 'pages/add_recette.dart';
 import 'pages/liste_recettes.dart';
@@ -42,8 +41,8 @@ class MyApp extends StatelessWidget {
 
 
 /*
-TODO: Clique sur recette va a la page d�taill�
-Faire la page d�tailler avec image et ou place holder
+TODO: Clique sur recette va a la page détaillé
+Faire la page détailler avec image et ou place holder
 Mettre l'action pour modifier la recette
 
 */
